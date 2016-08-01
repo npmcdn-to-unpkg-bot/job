@@ -69,11 +69,7 @@
         }
     }
 
-    nodes.forEach(function(d, i){
-        d.x = d.y = width/(nodes.length)*i;
-        console.log(d);
-    });
-
+    
     var svg = d3.select(".i-show-canvas").append("svg")
         .attr("width", width)
         .attr("height", height);
@@ -83,9 +79,24 @@
         .nodes(nodes)
         .links(edges)
         .size([width,height])
-        .linkDistance(500)
+        .linkDistance(400)
         .linkStrength(0)
-        .charge([-900]);
+        .charge(-1000)
+        .chargeDistance(500)
+        .friction(0.8);
+    
+    nodes.forEach(function(d, i){
+        if(i !== 0){
+            d.x = width/(nodes.length)*(i+4);
+            d.y = width/(nodes.length)*(i+6);
+        }
+        else{
+            d.x = width/2;
+            d.y = height/2;
+        }
+        console.log(i);
+        console.log(d);
+    });
 
     var drag = force.drag()
         .on("dragstart", function(d, i){
@@ -93,6 +104,15 @@
         });
 
     force.start();
+
+    var ox = 0, oy = 0;
+    nodes.forEach(function(d, i){
+        ox += d.x, oy += d.y; 
+    });
+    ox = ox / nodes.length - width / 2, oy = oy / nodes.length - height / 2;
+    nodes.forEach(function(d, i){
+        d.x -= ox, d.y -= oy; 
+    });
 
     var defs = svg.append("defs");
 
