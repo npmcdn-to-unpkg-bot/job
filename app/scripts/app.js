@@ -4,57 +4,77 @@
 //     ]);
 
 (function(){
-    var width = 1000, height = 800;
+    var width = 1000, height = 600;
 
     var $leftPanelSettings = $('.i-left-panel-settings');
 
-    var data = [
-        {
-            name: 'A',
+    // var data = [
+    //     {
+    //         name: 'A',
+    //         order: 0,
+    //         link: [4, 7, 9]
+    //     },{
+    //         name: 'B',
+    //         order: 1,
+    //         link: [0]
+    //     },{
+    //         name: 'C',
+    //         order: 2,
+    //         link: [1]
+    //     },{
+    //         name: 'D',
+    //         order: 3,
+    //         link: [2]
+    //     },{
+    //         name: 'E',
+    //         order: 4,
+    //         link: [3]
+    //     },{
+    //         name: 'F',
+    //         order: 5,
+    //         link: [1, 2]
+    //     },{
+    //         name: 'G',
+    //         order: 6,
+    //         link: [5]
+    //     },{
+    //         name: 'H',
+    //         order: 7,
+    //         link: [6, 0]
+    //     },{
+    //         name: 'I',
+    //         order: 8,
+    //         link: [0]
+    //     },{
+    //         name: 'J',
+    //         order: 9,
+    //         link: [10]
+    //     },{
+    //         name: 'K',
+    //         order: 10,
+    //         link: [4]
+    //     }
+    // ];
+    var nodes = [], edges = [];
+
+    var data = [{
+            name: "A",
             order: 0,
-            link: [7, 4, 9]
+            link: []
         },{
-            name: 'B',
+            name: "B",
             order: 1,
-            link: [0]
+            link: [0, 2, 3]
         },{
-            name: 'C',
+            name: "C",
             order: 2,
-            link: [1]
+            link: []
         },{
-            name: 'D',
+            name: "D",
             order: 3,
-            link: [2]
-        },{
-            name: 'E',
-            order: 4,
-            link: [3]
-        },{
-            name: 'F',
-            order: 5,
-            link: [1, 2]
-        },{
-            name: 'G',
-            order: 6,
-            link: [5]
-        },{
-            name: 'H',
-            order: 7,
-            link: [6]
-        },{
-            name: 'I',
-            order: 8,
-            link: [0]
-        },{
-            name: 'J',
-            order: 9,
-            link: [10]
-        },{
-            name: 'K',
-            order: 10,
-            link: [4]
-        }
-    ], nodes = [], edges = [];
+            link: []
+        },
+    ];
 
     for(var i = 0; i < data.length; i ++){
         var tmpData = data[i];
@@ -69,7 +89,6 @@
         }
     }
 
-    
     var svg = d3.select(".i-show-canvas").append("svg")
         .attr("width", width)
         .attr("height", height);
@@ -84,18 +103,16 @@
         .charge(-1000)
         .chargeDistance(500)
         .friction(0.8);
-    
+
     nodes.forEach(function(d, i){
-        if(i !== 0){
-            d.x = width/(nodes.length)*(i+4);
-            d.y = width/(nodes.length)*(i+6);
+        if(i !== 2){
+            d.x = width/(nodes.length)*(i+1);
+            d.y = width/(nodes.length)*(i+.3);
         }
         else{
             d.x = width/2;
             d.y = height/2;
         }
-        console.log(i);
-        console.log(d);
     });
 
     var drag = force.drag()
@@ -105,60 +122,58 @@
 
     force.start();
 
-    var ox = 0, oy = 0;
-    nodes.forEach(function(d, i){
-        ox += d.x, oy += d.y; 
-    });
-    ox = ox / nodes.length - width / 2, oy = oy / nodes.length - height / 2;
-    nodes.forEach(function(d, i){
-        d.x -= ox, d.y -= oy; 
-    });
+    // var defs = svg.append("defs");
 
-    var defs = svg.append("defs");
+    // var arrowMarker = defs.append("marker")
+    //                         .attr("id","arrow")
+    //                         .attr("markerUnits","strokeWidth")
+    //                         .attr("markerWidth","12")
+    //                         .attr("markerHeight","12")
+    //                         .attr("viewBox","0 0 12 12")
+    //                         .attr("refX","6")
+    //                         .attr("refY","6")
+    //                         .attr("orient","auto");
 
-    var arrowMarker = defs.append("marker")
-                            .attr("id","arrow")
-                            .attr("markerUnits","strokeWidth")
-                            .attr("markerWidth","12")
-                            .attr("markerHeight","12")
-                            .attr("viewBox","0 0 12 12") 
-                            .attr("refX","6")
-                            .attr("refY","6")
-                            .attr("orient","auto");
+    // var arrow_path = "M10,1 L1,6, L10,11 L8,6 L10, 1";
 
-    var arrow_path = "M2,2 L10,6 L2,10 L6,6 L2,2";
+    // arrowMarker.append("path")
+    //             .attr("d",arrow_path)
+    //             .attr("fill","#000");
 
-    arrowMarker.append("path")
-                .attr("d",arrow_path)
-                .attr("fill","#000");
+    function drawLineArrow(x1,y1,x2,y2){
+        var path;
+        var slopy,cosy,siny;
+        var Par=10.0;
+        var x3,y3;
+        slopy=Math.atan2((y1-y2),(x1-x2));
+        cosy=Math.cos(slopy);
+        siny=Math.sin(slopy);
 
-    // var line = svg.append("line")
-    //          .attr("x1",0)
-    //          .attr("y1",0)
-    //          .attr("x2",200)
-    //          .attr("y2",50)
-    //          .attr("stroke","red")
-    //          .attr("stroke-width",2)
-    //          .attr("marker-end","url(#arrow)");
+        path="M"+x1+","+y1+" L"+x2+","+y2;
 
-    // var curve_path = "M20,70 T80,100 T160,80 T200,90";
+        x3=(Number(x1)+Number(x2))/2;
+        y3=(Number(y1)+Number(y2))/2;
 
-    // var curve = svg.append("path")
-    //              .attr("d",curve_path)
-    //              .attr("fill","white")
-    //              .attr("stroke","red")
-    //              .attr("stroke-width",2)
-    //              .attr("marker-start","url(#arrow)")
-    //              .attr("marker-mid","url(#arrow)")
-    //              .attr("marker-end","url(#arrow)");
+        path +=" M"+x3+","+y3;
 
-    var svg_edges = svg.selectAll("line")
+        path +=" L"+(Number(x3)+Number(Par*cosy-(Par/2.0*siny)))+","+(Number(y3)+Number(Par*siny+(Par/2.0*cosy)));  
+
+        path +=" M"+(Number(x3)+Number(Par*cosy+Par/2.0*siny)+","+ (Number(y3)-Number(Par/2.0*cosy-Par*siny)));  
+        path +=" L"+x3+","+y3;
+
+
+        return path;
+    }
+
+    var svg_edges = svg.selectAll("path")
         .data(edges)
         .enter()
-        .append("line")
-        .style("stroke","#ccc")
-        .style("stroke-width",1)
-        .attr("marker-end","url(#arrow)");
+        .append("path")
+        .attr("d", function(d, i){
+            return drawLineArrow(d.source.x, d.source.y, d.target.x, d.target.y);
+        })
+        .style("stroke","#000")
+        .style("stroke-width",2);
 
     var color = d3.scale.category20();
 
@@ -190,11 +205,13 @@
 
     force.on("tick", function(){ //对于每一个时间间隔
         //更新连线坐标
-        svg_edges.attr("x1",function(d){ return d.source.x; })
-            .attr("y1",function(d){ return d.source.y; })
-            .attr("x2",function(d){ return d.target.x; })
-            .attr("y2",function(d){ return d.target.y; });
-
+        // svg_edges.attr("x1",function(d){ return d.source.x; })
+        //     .attr("y1",function(d){ return d.source.y; })
+        //     .attr("x2",function(d){ return d.target.x; })
+        //     .attr("y2",function(d){ return d.target.y; });
+        svg_edges.attr("d", function(d){
+            return drawLineArrow(d.source.x, d.source.y, d.target.x, d.target.y);
+        });
         //更新节点坐标
         svg_nodes.attr("cx",function(d){ return d.x; })
             .attr("cy",function(d){ return d.y; });
