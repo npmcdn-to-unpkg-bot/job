@@ -8,73 +8,97 @@
 
     var $leftPanelSettings = $('.i-left-panel-settings');
 
-    var data = [
-        {
-            name: 'A',
-            order: 0,
-            link: [4, 7, 9]
-        },{
-            name: 'B',
-            order: 1,
-            link: [0]
-        },{
-            name: 'C',
-            order: 2,
-            link: [1]
-        },{
-            name: 'D',
-            order: 3,
-            link: [2]
-        },{
-            name: 'E',
-            order: 4,
-            link: [3]
-        },{
-            name: 'F',
-            order: 5,
-            link: [1, 2]
-        },{
-            name: 'G',
-            order: 6,
-            link: [5]
-        },{
-            name: 'H',
-            order: 7,
-            link: [6, 0]
-        },{
-            name: 'I',
-            order: 8,
-            link: [0]
-        },{
-            name: 'J',
-            order: 9,
-            link: [10]
-        },{
-            name: 'K',
-            order: 10,
-            link: [4]
-        }
-    ];
+    // var data = [
+    //     {
+    //         name: 'A',
+    //         order: 0,
+    //         link: [4, 7, 9]
+    //     },{
+    //         name: 'B',
+    //         order: 1,
+    //         link: [0]
+    //     },{
+    //         name: 'C',
+    //         order: 2,
+    //         link: [1]
+    //     },{
+    //         name: 'D',
+    //         order: 3,
+    //         link: [2]
+    //     },{
+    //         name: 'E',
+    //         order: 4,
+    //         link: [3]
+    //     },{
+    //         name: 'F',
+    //         order: 5,
+    //         link: [1, 2]
+    //     },{
+    //         name: 'G',
+    //         order: 6,
+    //         link: [5]
+    //     },{
+    //         name: 'H',
+    //         order: 7,
+    //         link: [6, 0]
+    //     },{
+    //         name: 'I',
+    //         order: 8,
+    //         link: [0]
+    //     },{
+    //         name: 'J',
+    //         order: 9,
+    //         link: [10]
+    //     },{
+    //         name: 'K',
+    //         order: 10,
+    //         link: [4]
+    //     }
+    // ];
     var nodes = [], edges = [];
 
-    // var data = [{
-    //         name: "A",
-    //         order: 0,
-    //         link: []
-    //     },{
-    //         name: "B",
-    //         order: 1,
-    //         link: [0, 2, 3]
-    //     },{
-    //         name: "C",
-    //         order: 2,
-    //         link: []
-    //     },{
-    //         name: "D",
-    //         order: 3,
-    //         link: []
-    //     },
-    // ];
+    var data = [{
+            name: "A",
+            order: 0,
+            link: [1]
+        },{
+            name: "B",
+            order: 1,
+            link: [2]
+        },{
+            name: "C",
+            order: 2,
+            link: [3]
+        },{
+            name: "D",
+            order: 3,
+            link: [4]
+        },{
+            name: "E",
+            order: 4,
+            link: [5]
+        },{
+            name: "F",
+            order: 5,
+            link: [6]
+        },{
+            name: "G",
+            order: 6,
+            link: [7]
+        },{
+            name: "H",
+            order: 7,
+            link: [8]
+        },{
+            name: "I",
+            order: 8,
+            link: [9]
+        },{
+            name: "J",
+            order: 9,
+            link: [0]
+        }
+    ];
 
     for(var i = 0; i < data.length; i ++){
         var tmpData = data[i];
