@@ -6,6 +6,58 @@
 body, html {
   height: 100%;
   min-height: 600px;
+  position: relative;
+}
+
+@keyframes spinner-circle-clipper {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+@keyframes spinner-circle {
+  0% {
+    transform: rotate(-180deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+.i-mask {
+  height: 100%;
+  width: 100%;
+  background: #d41fef;
+  position: absolute;
+  z-index: 10000;
+}
+.i-mask .spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 70px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 5px rgba(58, 168, 237, 0.2);
+}
+.i-mask .spinner i {
+  position: absolute;
+  clip: rect(0, 70px, 70px, 35px);
+  width: 70px;
+  height: 70px;
+  animation: spinner-circle-clipper 1s ease-in-out infinite;
+}
+.i-mask .spinner i::after {
+  position: absolute;
+  clip: rect(0, 70px, 70px, 35px);
+  width: 70px;
+  height: 70px;
+  animation: spinner-circle 1s ease-in-out infinite;
+  content: '';
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 5px #3ad9ed;
 }
 
 .i-full-container {
@@ -13,12 +65,12 @@ body, html {
 }
 .i-full-container .i-left-panel, .i-full-container .i-right-canvas {
   height: 100%;
+  padding: 20px;
 }
 .i-full-container .i-left-panel {
   float: left;
   width: 360px;
-  padding: 20px;
-  background: #9015a2;
+  background: #d41fef;
 }
 .i-full-container .i-left-panel .i-left-panel-settings {
   display: none;
@@ -26,10 +78,12 @@ body, html {
   height: 100%;
 }
 .i-full-container .i-right-canvas {
-  padding: 20px;
   margin-left: 400px;
   background-color: #dedede;
   position: relative;
+}
+.i-full-container .i-right-canvas svg {
+  margin: auto;
 }
 .i-full-container .i-right-canvas .i-right-canvas-info-panel {
   display: none;

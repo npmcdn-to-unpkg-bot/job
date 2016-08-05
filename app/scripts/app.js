@@ -1,104 +1,34 @@
-// var app = angular.module('app', [
-//         'ngResource',
-//         'ui.router'
-//     ]);
 
 (function(){
-    var width = 1000, height = 600;
+    var width = $('.i-right-canvas').width() - 40,
+        height = $('.i-right-canvas').height() - 60;
+
+    var nodes = [], edges = [];
+
+    var charge, linkDistance;
 
     var $leftPanelSettings = $('.i-left-panel-settings');
 
-    // var data = [
-    //     {
-    //         name: 'A',
-    //         order: 0,
-    //         link: [4, 7, 9]
-    //     },{
-    //         name: 'B',
-    //         order: 1,
-    //         link: [0]
-    //     },{
-    //         name: 'C',
-    //         order: 2,
-    //         link: [1]
-    //     },{
-    //         name: 'D',
-    //         order: 3,
-    //         link: [2]
-    //     },{
-    //         name: 'E',
-    //         order: 4,
-    //         link: [3]
-    //     },{
-    //         name: 'F',
-    //         order: 5,
-    //         link: [1, 2]
-    //     },{
-    //         name: 'G',
-    //         order: 6,
-    //         link: [5]
-    //     },{
-    //         name: 'H',
-    //         order: 7,
-    //         link: [6, 0]
-    //     },{
-    //         name: 'I',
-    //         order: 8,
-    //         link: [0]
-    //     },{
-    //         name: 'J',
-    //         order: 9,
-    //         link: [10]
-    //     },{
-    //         name: 'K',
-    //         order: 10,
-    //         link: [4]
-    //     }
-    // ];
-    var nodes = [], edges = [];
-
-    var data = [{
-            name: "A",
-            order: 0,
-            link: [1]
-        },{
-            name: "B",
-            order: 1,
-            link: [2]
-        },{
-            name: "C",
-            order: 2,
-            link: [3]
-        },{
-            name: "D",
-            order: 3,
-            link: [4]
-        },{
-            name: "E",
-            order: 4,
-            link: [5]
-        },{
-            name: "F",
-            order: 5,
-            link: [6]
-        },{
-            name: "G",
-            order: 6,
-            link: [7]
-        },{
-            name: "H",
-            order: 7,
-            link: [8]
-        },{
-            name: "I",
-            order: 8,
-            link: [9]
-        },{
-            name: "J",
-            order: 9,
-            link: [0]
-        }
-    ];
+    if(width > 1440){
+        width = 1440;
+    }
+    if(height > 900){
+        height = 900;
+    }
+    if(width/height >= 1.8){
+        width = height * 1.8;
+    }
+    else{
+        height = width/1.8;
+    }
+    if(width > 1000){
+        charge = -10000;
+        linkDistance = 60;
+    }
+    else{
+        charge = -8000;
+        linkDistance = 40
+    }
 
     for(var i = 0; i < data.length; i ++){
         var tmpData = data[i];
@@ -118,15 +48,29 @@
         .attr("height", height);
 
 
+    // var force = d3.layout.force()
+    //     .nodes(nodes)
+    //     .links(edges)
+    //     .size([width,height])
+    //     .linkDistance(70)
+    //     .linkStrength(1)
+    //     .charge(-20000)
+    //     .gravity(1);
+
     var force = d3.layout.force()
         .nodes(nodes)
         .links(edges)
         .size([width,height])
-        .linkDistance(400)
-        .linkStrength(0)
-        .charge(-1000)
-        .chargeDistance(500)
-        .friction(0.8);
+        .linkDistance(linkDistance)
+        .linkStrength(1)
+        .charge(charge)
+        .gravity(1);
+
+    // var force = d3.layout.force().size([w, h])
+    // .nodes(nodes).links(links)
+    // .gravity(1).linkDistance(50).charge(-3000).linkStrength(function(x) {
+    //             return x.weight * 10
+    //         });
 
     nodes.forEach(function(d, i){
         if(i !== 0){
@@ -143,10 +87,10 @@
     var drag = force.drag()
         .on("dragstart", function(d, i){
             d.fixed = true;
+            // setTimeout(function(){
+            //     d.fixed = false;
+            // }, 1000);
         });
-        // .on("dragend", function(d, i){
-        //     d.fixed = false;
-        // });
 
     force.start();
 
@@ -155,6 +99,7 @@
         nodes.forEach(function(d, i){
             d.fixed = false;
         });
+        $('.i-mask').fadeOut(500);
     },2000);
     // var defs = svg.append("defs");
 
@@ -292,5 +237,33 @@
             hideInfo();
         }
     });
+
+    // function initDataTest(){
+    //     var data = [];
+    //     var q = 30, p = 31;
+    //     while(p > 30){
+    //         p = Math.floor(Math.random() * 100);
+    //     }
+    //     for(var i = 0; i < p; i ++){
+    //         data.push({
+    //             name: i,
+    //             order: i,
+    //             link: (function(){
+    //                 var arr = [];
+    //                 var linkNum = Math.ceil(Math.random() * 10);
+    //                 for(var j = 0; j < linkNum; j ++){
+    //                     var link = 100;
+    //                     while(link >= p || link === i){
+    //                         link = Math.ceil(Math.random() * 100);
+    //                     }
+
+    //                     arr.push(link);
+    //                 }
+    //                 return arr;
+    //             })()
+    //         })
+    //     }
+    //     return data;
+    // }
 
 })();
