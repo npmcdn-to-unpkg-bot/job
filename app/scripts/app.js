@@ -1,7 +1,13 @@
+'use strict';
+
+// var app = angular.module('app', ['ngResource', 'ui-router']);
+
 
 (function(){
     var width = $('.i-right-canvas').width() - 40,
         height = $('.i-right-canvas').height() - 60;
+
+    var radius = 20;
 
     var nodes = [], edges = [];
 
@@ -22,8 +28,8 @@
         height = width/1.8;
     }
     if(width > 1000){
-        charge = -10000;
-        linkDistance = 60;
+        charge = -14000;
+        linkDistance = 65;
     }
     else{
         charge = -8000;
@@ -95,12 +101,7 @@
     force.start();
 
 
-    setTimeout(function(){
-        nodes.forEach(function(d, i){
-            d.fixed = false;
-        });
-        $('.i-mask').fadeOut(500);
-    },2000);
+    
     // var defs = svg.append("defs");
 
     // var arrowMarker = defs.append("marker")
@@ -143,7 +144,31 @@
 
         return path;
     }
-
+    
+    function checkOverflow(){
+        var maxWidth = width, maxHeight = height, minWidth = 0, minHeight = 0;
+        nodes.forEach(function(d, i){
+            if(d.x > maxWidth){
+                maxWidth = d.x;
+            }
+            if(d.y >maxHeight){
+                maxHeight = d.y
+            }
+            if(d.x < minWidth){
+                minWidth = d.x;
+            }
+            if(d.y < minHeight){
+                minHeight = d.y;
+            }
+        });
+        return {
+            h: maxHeight - minHeight+2*radius,
+            w: maxWidth - minWidth+2*radius,
+            top: minHeight-radius,
+            left: minWidth-radius
+        };
+    }
+    
     var svg_edges = svg.selectAll("path")
         .data(edges)
         .enter()
@@ -171,6 +196,9 @@
         })
         .call(drag);
 
+
+
+
     var svg_texts = svg.selectAll("text")
         .data(nodes)
         .enter()
@@ -178,16 +206,35 @@
         .style("fill", "black")
         .attr("dx", 20)
         .attr("dy", 8)
-        .text(function(d){
-            return d.name;
+        .text(function(d, i){
+            return d.name+' '+i;
         });
+
+    $.post('http://localhost:3000', {
+        a: 'aaa'
+    }, function(response){
+        console.log(response);
+    })
+
+    
+
+
+    setTimeout(function(){
+        nodes.forEach(function(d, i){
+            d.fixed = false;
+        });
+        var overflow = checkOverflow();
+        
+        document.getElementsByTagName('svg')[0].setAttribute('viewBox', overflow.left+' '+overflow.top+' '+overflow.w+' '+overflow.h);
+        $('.i-mask').fadeOut(500);
+    },2000);
 
     force.on("tick", function(){ //对于每一个时间间隔
         //更新连线坐标
-        // svg_edges.attr("x1",function(d){ return d.source.x; })
-        //     .attr("y1",function(d){ return d.source.y; })
-        //     .attr("x2",function(d){ return d.target.x; })
-        //     .attr("y2",function(d){ return d.target.y; });
+        svg_edges.attr("x1",function(d){ return d.source.x; })
+            .attr("y1",function(d){ return d.source.y; })
+            .attr("x2",function(d){ return d.target.x; })
+            .attr("y2",function(d){ return d.target.y; });
         svg_edges.attr("d", function(d){
             return drawLineArrow(d.source.x, d.source.y, d.target.x, d.target.y);
         });
@@ -237,6 +284,8 @@
             hideInfo();
         }
     });
+
+
 
     // function initDataTest(){
     //     var data = [];

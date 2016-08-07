@@ -84,6 +84,7 @@ body, html {
 }
 .i-full-container .i-right-canvas svg {
   margin: auto;
+  border: 1px solid #ccc;
 }
 .i-full-container .i-right-canvas .i-right-canvas-info-panel {
   display: none;
